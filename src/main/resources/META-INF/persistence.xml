@@ -16,7 +16,7 @@
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:postgresql://localhost:5432/book_db"/>
             <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="passer"/>
+            <property name="jakarta.persistence.jdbc.password" value="azerty"/>
 
             <!-- ===================== HIBERNATE ===================== -->
             <property name="hibernate.dialect"

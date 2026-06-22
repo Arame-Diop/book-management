@@ -4,84 +4,120 @@ import sn.iage.isi.entities.Book;
 import sn.iage.isi.entities.Category;
 import sn.iage.isi.repositories.BookRepository;
 import sn.iage.isi.repositories.CategoryRepository;
+import sn.iage.isi.repositories.JpaUtil;
 
 import java.util.List;
+import java.util.Map;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         CategoryRepository categoryRepository = new CategoryRepository();
         BookRepository bookRepository = new BookRepository();
 
-        // Création d'un livre
-//        Book book = new Book();
-//        book.setTitle("L'école des femmes");
-//        book.setAuthor("Molière");
-//        book.setPublicationYear(1662);
-//        book.setCountPages(191);
-//        book.setCategory(categoryRepository.getById(3));
-//
-//        bookRepository.createBook(book);
-
-        // Liste de tous les livres
-//        List<Book> books = bookRepository.ListAllBooks();
-//        for (Book b : books) {
-//            System.out.println(b);
+        // Pour Créer quelques catégories
+//        {
+//            categoryRepository.create(Category.builder().name("Roman").build());
+//            categoryRepository.create(Category.builder().name("Théâtre").build());
+//            categoryRepository.create(Category.builder().name("Poésie").build());
+//            System.out.println("Catégories créées !");
 //        }
 
-        // Trouver un livre grace à son id
-//        Book book = bookRepository.findBookById(3);
-//        System.out.println(book);
-
-        // Trouver un livre grace à son isbn
-//        Book book = bookRepository.findBookByIsbn("978-0-3746-4427-7");
-//        System.out.println(book);
-
-        // Mettre à jour un livre
-//        Book b = new Book();
-//        b.setTitle("Les Fleurs du Mal");
-//        b.setAuthor("Charles Baudelaire");
-//        b.setPublicationYear(1857);
-//        b.setCountPages(256);
-//        b.setCategory(categoryRepository.getById(4));
-//
-//        bookRepository.updateBook(4, b);
-
-        // Supprimer un livre
-//        bookRepository.deleteBook(5);
-
-        // Liste des livres par catégorie
-//        List<Book> books = bookRepository.ListeBooksByCategory("théâtre");
-//        for (Book b : books) {
-//            System.out.println(b);
+        // Pour Créer un livre
+//        {
+//            Book book = new Book();
+//            book.setTitle("L'école des femmes");
+//            book.setAuthor("Molière");
+//            book.setPublicationYear(1662);
+//            book.setCountPages(191);
+//            book.setCategory(categoryRepository.getById(3));
+//            Book created = bookRepository.createBook(book);
+//            System.out.println("Livre créé : " + created);
 //        }
 
-        // Rechercher des livres par titre
-//        List<Book> books = bookRepository.searchBooksByTitle("m");
-//        for(Book book : books){
+        // Pour Lister tous les livres
+//        {
+//            List<Book> books = bookRepository.ListAllBooks();
+//            for (Book b : books) {
+//                System.out.println(b);
+//            }
+//        }
+
+        // =====  Pour Trouver un livre par son id =====
+//        {
+//            Book book = bookRepository.findBookById(1);
 //            System.out.println(book);
 //        }
 
-        // Rechercher des livres par auteur
-//        List<Book> books = bookRepository.searchBooksByAuthor("ch");
-//        for(Book book : books){
+        // ===== Pour Trouver un livre par son isbn =====
+//        {
+//            Book book = bookRepository.findBookByIsbn("979-0-1306-6716-7");
 //            System.out.println(book);
 //        }
 
-        // Rechercher des livres parus après une année donnée
-//        List<Book> books = bookRepository.searchBooksAfterYear(1700);
-//        for (Book book : books) {
-//            System.out.println(book);
+        // Pour Mettre à jour un livre
+//        {
+//            Book b = new Book();
+//            b.setTitle("Les Fleurs du Mal");
+//            b.setAuthor("Charles Baudelaire");
+//            b.setPublicationYear(1857);
+//            b.setCountPages(256);
+//            b.setCategory(categoryRepository.getById(4));
+//            Book updated = bookRepository.updateBook(1, b);
+//            System.out.println("Livre mis à jour : " + updated);
 //        }
 
-        // Nombre de livres par catégorie
-//        String categoryName = "Roman";
-//        long nb = bookRepository.countBooksByCategory(categoryName);
-//        System.out.println("Nombre de livre de la catégorie " + categoryName  + " : " + nb);
+        // Pour Supprimer un livre
+//        {
+//            bookRepository.deleteBook(1);
+//            System.out.println("Livre supprimé.");
+//        }
 
-        // Nombre total de livres
-//        long nb = bookRepository.countAllBooks();
-//        System.out.println("Nombre total de livre : " + nb);
+        // Pour Lister des livres par catégorie
+//        {
+//            List<Book> books = bookRepository.ListeBooksByCategory("théâtre");
+//            for (Book b : books) {
+//                System.out.println(b);
+//            }
+//        }
+
+        // Pour Rechercher des livres par titre
+//        {
+//            List<Book> books = bookRepository.searchBooksByTitle("m");
+//            for (Book b : books) {
+//                System.out.println(b);
+//            }
+//        }
+
+        // Pour Rechercher des livres par auteur
+//        {
+//            List<Book> books = bookRepository.searchBooksByAuthor("ch");
+//            for (Book b : books) {
+//                System.out.println(b);
+//            }
+//        }
+
+        // Pour Rechercher des livres publier après une année donnée
+//        {
+//            List<Book> books = bookRepository.searchBooksAfterYear(1700);
+//            for (Book b : books) {
+//                System.out.println(b);
+//            }
+//        }
+
+        // Pour lister le  Nombre de livres par catégorie
+//        {
+//            Map<String, Long> parCategorie = bookRepository.countBooksByCategory();
+//            parCategorie.forEach((cat, nb) ->
+//                    System.out.println(cat + " : " + nb + " livre(s)"));
+//        }
+
+        //  Nombre total de livres
+//        {
+//            long nb = bookRepository.countAllBooks();
+//            System.out.println("Nombre total de livres : " + nb);
+//        }
+
+
+        JpaUtil.close();
     }
 }

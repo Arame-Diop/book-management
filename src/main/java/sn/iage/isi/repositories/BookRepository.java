@@ -5,7 +5,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import sn.iage.isi.entities.Book;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class BookRepository {
@@ -58,14 +60,17 @@ public class BookRepository {
             tx.begin();
             em.persist(b);
             tx.commit();
-            book.getCategory().getBooks().add(b);
-        }catch(Exception e) {
+            // Sécurisé : on n'ajoute à la liste que si elle est déjà chargée (évite le NullPointerException)
+            if (book.getCategory() != null && book.getCategory().getBooks() != null) {
+                book.getCategory().getBooks().add(b);
+            }
+        } catch (Exception e) {
             tx.rollback();
         }
         return b;
     }
 
-    public List<Book> ListAllBooks(){
+    public List<Book> ListAllBooks() {
         return em
                 .createNamedQuery("Book.findAll", Book.class)
                 .getResultList();
@@ -73,7 +78,7 @@ public class BookRepository {
 
     public Book findBookById(int id) {
         Book book = em.find(Book.class, id);
-        if(book == null)
+        if (book == null)
             throw new EntityNotFoundException("Book not found");
         return book;
     }
@@ -82,16 +87,17 @@ public class BookRepository {
         try {
             return em
                     .createQuery("SELECT b FROM Book b WHERE b.isbn = :isbn", Book.class)
-                    .setParameter("isbn", isbn).getSingleResult();
-        }catch(Exception e) {
+                    .setParameter("isbn", isbn)
+                    .getSingleResult();
+        } catch (Exception e) {
             throw new EntityNotFoundException("Book not found");
         }
     }
 
-    public Book updateBook(int id, Book newBook){
+    public Book updateBook(int id, Book newBook) {
         EntityTransaction tx = em.getTransaction();
         Book b = findBookById(id);
-        if (b != null){
+        if (b != null) {
             b.setTitle(newBook.getTitle());
             b.setAuthor(newBook.getAuthor());
             b.setPublicationYear(newBook.getPublicationYear());
@@ -148,14 +154,26 @@ public class BookRepository {
                 .getResultList();
     }
 
-    public Long countBooksByCategory(String categoryName) {
-        return em
-                .createQuery("SELECT COUNT(b.id) FROM Book b WHERE LOWER(b.category.name) = :categoryName", Long.class)
-                .setParameter("categoryName", categoryName.toLowerCase())
-                .getSingleResult();
+    // Nombre de livres PAR catégorie (sans paramètre) -> un total par catégorie
+    public Map<String, Long> countBooksByCategory() {
+        List<Object[]> results = em
+                .createQuery(
+                        "SELECT b.category.name, COUNT(b) " +
+                                "FROM Book b " +
+                                "GROUP BY b.category.name " +
+                                "ORDER BY b.category.name", Object[].class)
+                .getResultList();
+
+        Map<String, Long> counts = new LinkedHashMap<>();
+        for (Object[] row : results) {
+            String categoryName = (String) row[0];
+            Long total = (Long) row[1];
+            counts.put(categoryName, total);
+        }
+        return counts;
     }
 
-    public Long countAllBooks(){
+    public Long countAllBooks() {
         return em
                 .createQuery("SELECT COUNT(b.id) FROM Book b", Long.class)
                 .getSingleResult();
