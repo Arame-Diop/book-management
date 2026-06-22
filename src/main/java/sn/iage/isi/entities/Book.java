@@ -11,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@NamedQuery(name = "Book.findAll", query = "SELECT b FROM Book b ORDER BY b.title ASC")
 public class Book extends BaseEntity{
 
     @Column(nullable = false, length = 20, unique = true)
